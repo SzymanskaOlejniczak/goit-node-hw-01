@@ -1,25 +1,25 @@
-const fs = require("fs").promises;
-const path = require("node:path");
+const fs = require("fs");
+const path = require("path");
 
-const contactsPath = path.resolve(__dirname, "./db/contacts.json");
+const contactsPath = path.join(__dirname, 'db','contacts.json');
 
-// TODO: udokumentuj każdą funkcję
+
 function listContacts() {
-    fs.readFile(contactsPath, (error, data) => {
+    fs.readFile(contactsPath, (error, contacts) => {
         if (error) throw error;
     
-        const contacts = JSON.parse(data);
-        console.table(contacts);
+        //const contacts = JSON.parse(data);
+        console.table(JSON.parse(contacts));
       });
   }
   
   function getContactById(contactId) {
-    fs.readFile(contactsPath, (error, data) => {
+    fs.readFile(contactsPath, (error, contacts) => {
         if (error) throw error;
     
-        const contacts = JSON.parse(data);
-        const foundContact = contacts.find(({ id }) => id === contactId);
-        console.log(foundContact);
+      
+        const foundContact = JSON.parse(contacts).find(({ id }) => id === contactId);
+        console.table(foundContact);
       });
   }
   function removeContact(contactId) {
@@ -33,11 +33,11 @@ function listContacts() {
           fs.writeFile(contactsPath, JSON.stringify(filteredContacts), error => {
             if (error) throw error;
     
-            console.log('contact deleted');
+            console.table('contact deleted');
             listContacts();
           });
         } else {
-          console.log(`not found id ${contactId}`);
+          console.table(`not found id ${contactId}`);
           listContacts();
         }
       });
@@ -49,13 +49,13 @@ function listContacts() {
     
         const contacts = JSON.parse(data);
         const lastContactIndex = contacts.length - 1;
-        const id = contacts[lastContactIndex].id + 1;
+        const id = Number(contacts[lastContactIndex].id )+ 1;
     
-        contacts.push({ id, name, email, phone });
+        contacts.push({ id:id.toString(), name, email, phone });
         fs.writeFile(contactsPath, JSON.stringify(contacts), error => {
           if (error) throw error;
     
-          console.log('Contact successfully added');
+          console.table('Contact successfully added');
           listContacts();
         });
       });
@@ -68,10 +68,3 @@ function listContacts() {
 	addContact,
 };
   
-  function removeContact(contactId) {
-    // ...twój kod
-  }
-  
-  function addContact(name, email, phone) {
-    // ...twój kod
-  }
