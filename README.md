@@ -1,2 +1,3 @@
 # goit-node-hw-01
-image.png
+screens:
+https://agnieszka-szyman.imgbb.com/
